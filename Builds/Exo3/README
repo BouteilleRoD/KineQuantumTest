@@ -1,0 +1,20 @@
+Solution envisagées:
+
+  - Prendre le cube le plus loin du centre, puis le plus loin de ce cube et ansi de suite pour choisir 20% de bloc qui seront frontière
+  - Prendre les cubes avec les valeurs absolues des positions en X et Z les plus élevés en additionnant les valeurs absolues des positions on obtient un float qui nous permet
+de trier tous les cubes et de prendre les 20% premiers.
+  
+Solution adoptée : 
+
+  - Prendre le barycentre de tous les cubes. Prendre les 20% des cubes les plus éloignés du barycentre et les colorer en rouge.
+  
+Points forts : 
+
+- Efficace dans les cas de groupement excentrés
+- Généralement, très convenable
+
+Points faibles :
+
+- Mauvais lorsque tous les cubes sont en bordure
+- Non optimale
+- Semble ne pas fonctionner à la perfection en pratique
