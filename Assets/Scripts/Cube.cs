@@ -12,14 +12,15 @@ public class Cube : MonoBehaviour
         targetPlane = GameObject.Find("TargetArea");
         shotDirection = targetPlane.transform.position - transform.position;
         shotDirection.y = 0f;
-        shotDirection.x *= 5f * Mathf.Abs(transform.position.x);
-        shotDirection.z *= 5f * Mathf.Abs(transform.position.z);
-        GetComponent<Rigidbody>().AddForce(shotDirection);
+        shotDirection = shotDirection.normalized;
+        shotDirection.x = (targetPlane.transform.position.x - transform.position.x);
+        shotDirection.z = (targetPlane.transform.position.z - transform.position.z);
+        GetComponent<Rigidbody>().AddForce(shotDirection, ForceMode.Impulse);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -49,7 +49,7 @@ public class Turret : MonoBehaviour
             {
                 Target = null;
             }
-            if (Vector3.Distance(Target.transform.position, transform.position) < shotRange)
+            if (Target != null && Vector3.Distance(Target.transform.position, transform.position) < shotRange)
             {
                 if (Time.time - lastshotTimer > cd) 
                 {

@@ -11,11 +11,10 @@ public class GameManager : MonoBehaviour
     int nbBorder = 10;
     List<GameObject> _cubes = new List<GameObject>();
     GameObject[] _border;
-    bool needtoadd = true;
+    bool needtoadd = false;
     // Start is called before the first frame update
     public void Start()
     {
-        Debug.Log("Cubes : " + cubeNumber);
         nbBorder = (int)cubeNumber * 20 / 100;
         _border = new GameObject[nbBorder];
         for (int i = 0; i < cubeNumber; i++)
@@ -36,14 +35,29 @@ public class GameManager : MonoBehaviour
             barycentre.z += c.transform.position.z;
         }
         barycentre = barycentre / cubeNumber;
-        foreach(GameObject c in _cubes)
+        for (int h = nbBorder - 1 ; h >= 0; h--)
+        {
+            for (int j = 1; j <= h; j++)
+            {
+                if (Vector3.Distance(_border[j - 1].transform.position, barycentre) < Vector3.Distance(_border[j].transform.position, barycentre))
+                {
+                    GameObject tmp = _border[j];
+                    _border[j] = _border[j - 1];
+                    _border[j - 1] = tmp;
+                }
+            }
+        }
+        foreach (GameObject c in _cubes)
         {
             int j = nbBorder - 1;
-            while(Vector3.Distance(c.transform.position, barycentre) < Vector3.Distance(_border[j].transform.position, barycentre))
+
+            needtoadd = false;
+            while (j >= 0 && Vector3.Distance(c.transform.position, barycentre) > Vector3.Distance(_border[j].transform.position, barycentre))
             {
                 j--;
                 if (j < 0) 
                 {
+                    j = 0;
                     needtoadd = false;
                     break;
                 }
@@ -51,11 +65,23 @@ public class GameManager : MonoBehaviour
                 {
                     needtoadd = true;
                 }
-
+                if (Vector3.Distance(c.transform.position, barycentre) == Vector3.Distance(_border[j].transform.position, barycentre))
+                {
+                    needtoadd = false;
+                    break;
+                }
             }
-            if(needtoadd) _border[j] = c;
+            
+            if (needtoadd) 
+            {
+                for (int u = nbBorder - 1; u > j + 1; u--)
+                {
+                    _border[u] = _border[u - 1];
+                }
+                _border[j + 1] = c;
+            }
         }
-        foreach(GameObject bd in _border)
+        foreach (GameObject bd in _border)
         {
             bd.GetComponent<MeshRenderer>().material = Resources.Load("ShootingAreaMat") as Material;
         }
